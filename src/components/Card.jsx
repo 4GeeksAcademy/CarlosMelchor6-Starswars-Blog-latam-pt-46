@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer"; 
 
-
 export const Card = ({ name, type, uid }) => {
     const { dispatch } = useGlobalReducer()
   

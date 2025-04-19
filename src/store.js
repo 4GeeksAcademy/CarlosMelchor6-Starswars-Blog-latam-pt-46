@@ -3,7 +3,8 @@ export const initialStore = () => {
     resultPeople: [],
     resultPlanets: [],
     resultVehicles: [],
-    favorites:[]
+    favorites:[],
+    SelectById: null
   };
 };
 
@@ -34,6 +35,33 @@ export default function storeReducer(store, action = {}) {
         ...store,
         favorites: store.favorites.filter((fav) => fav !== name),
       };
+    }
+
+    case "GET_BY_ID": {
+      const {id, category} = action.payload
+      let dataById = null
+
+      switch (category) {
+        case "people":
+          dataById = store.resultPeople.find((item) => item.id !== id)
+          break;
+
+        case "planets":
+          dataById = store.resultPlanets.find((item) => item.id !== id)
+          break;
+
+          case "vehicles":
+          dataById = store.resultVehicles.find((item) => item.id !== id)
+          break;
+
+        default:
+          console.error("Categoria no encontrada")
+          break;
+      }
+      return {
+        ...store,
+        SelectById: dataById
+      }
     }
     
     default:
