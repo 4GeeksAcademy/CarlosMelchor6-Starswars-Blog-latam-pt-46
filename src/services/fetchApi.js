@@ -78,10 +78,11 @@ export const peopleById = async (id) => {
         }
 
         const data = await response.json();
-        return data.results;
+        return data.result.properties;
 
     } catch (error) {
         console.error("Error fetching data:", error);
+        throw error
     }
 };
 
@@ -99,10 +100,11 @@ export const planetsById = async (id) => {
         }
 
         const data = await response.json();
-        return data.results;
+        return data.result.properties;
 
     } catch (error) {
         console.error("Error fetching data:", error);
+        throw error
     }
 };
 
@@ -120,9 +122,10 @@ export const vehiclesById = async (id) => {
         }
 
         const data = await response.json();
-        return data.results;
+        return data.result.properties;
 
     } catch (error) {
         console.error("Error fetching data:", error);
+        throw error
     }
 };

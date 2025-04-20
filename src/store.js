@@ -38,30 +38,27 @@ export default function storeReducer(store, action = {}) {
     }
 
     case "GET_BY_ID": {
-      const {id, category} = action.payload
-      let dataById = null
-
+      const { id, category, data } = action.payload;
+      let dataById = null;
+    
       switch (category) {
         case "people":
-          dataById = store.resultPeople.find((item) => item.id !== id)
+          dataById = store.resultPeople.find(item => item.uid === id);
           break;
-
         case "planets":
-          dataById = store.resultPlanets.find((item) => item.id !== id)
+          dataById = store.resultPlanets.find(item => item.uid === id);
           break;
-
-          case "vehicles":
-          dataById = store.resultVehicles.find((item) => item.id !== id)
+        case "vehicles":
+          dataById = store.resultVehicles.find(item => item.uid === id);
           break;
-
         default:
-          console.error("Categoria no encontrada")
+          console.error("Categoría no encontrada");
           break;
       }
       return {
         ...store,
-        SelectById: dataById
-      }
+        SelectById: dataById || data,
+      };
     }
     
     default:

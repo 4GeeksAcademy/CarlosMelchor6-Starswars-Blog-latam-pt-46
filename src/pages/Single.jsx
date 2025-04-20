@@ -1,31 +1,150 @@
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import React from "react";
+import { peopleById, planetsById, vehiclesById } from "../services/fetchApi";
 
-export const Single = (props) => {
+export const Single = () => {
   const { store, dispatch } = useGlobalReducer();
+  const { uid, type } = useParams();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let data;
 
+        switch (type) {
+          case "people":
+            data = await peopleById(uid);
+            break;
+          case "planets":
+            data = await planetsById(uid);
+            break;
+          case "vehicles":
+            data = await vehiclesById(uid);
+            break;
+          default:
+            throw new Error("Tipo de categoría no válido");
+        }
+
+        dispatch({
+          type: "GET_BY_ID",
+          payload: {
+            category: type,
+            id: uid,
+            data: data,
+          },
+        });
+
+      } catch (error) {
+        console.error("Error obteniendo detalles:", error);
+      }
+    };
+
+    fetchData();
+  }, [uid, type, dispatch]);
+
+  const itemDetails = store.SelectById;
+
+  const renderContent = () => {
+    if (!itemDetails) {
+      return (
+        <div className="alert alert-warning">
+          No se encontró la información solicitada
+        </div>
+      );
+    }
+    return (
+      <>
+        <div className="card-body">
+          <h1 className="card-title text-center mb-4">{itemDetails.name}</h1>
+
+          {type === "people" && (
+            <div className="card-text">
+              <p>
+                <strong>Género:</strong> {itemDetails.gender}
+              </p>
+              <p>
+                <strong>Año de nacimiento:</strong> {itemDetails.birth_year}
+              </p>
+              <p>
+                <strong>Color de ojos:</strong> {itemDetails.eye_color}
+              </p>
+              <p>
+                <strong>Color de pelo:</strong> {itemDetails.hair_color}
+              </p>
+              <p>
+                <strong>Altura:</strong> {itemDetails.height} cm
+              </p>
+              <p>
+                <strong>Peso:</strong> {itemDetails.mass} kg
+              </p>
+              <p>
+                <strong>Color de piel:</strong> {itemDetails.skin_color}
+              </p>
+            </div>
+          )}
+
+          {type === "planets" && (
+            <div className="card-text">
+              <p>
+                <strong>Clima:</strong> {itemDetails.climate}
+              </p>
+              <p>
+                <strong>Terreno:</strong> {itemDetails.terrain}
+              </p>
+              <p>
+                <strong>Población:</strong> {itemDetails.population}
+              </p>
+              <p>
+                <strong>Diámetro:</strong> {itemDetails.diameter}
+              </p>
+              <p>
+                <strong>Periodo de rotación:</strong>{" "}
+                {itemDetails.rotation_period}
+              </p>
+              <p>
+                <strong>Periodo orbital:</strong> {itemDetails.orbital_period}
+              </p>
+            </div>
+          )}
+
+          {type === "vehicles" && (
+            <div className="card-text">
+              <p>
+                <strong>Modelo:</strong> {itemDetails.model}
+              </p>
+              <p>
+                <strong>Fabricante:</strong> {itemDetails.manufacturer}
+              </p>
+              <p>
+                <strong>Clase:</strong> {itemDetails.vehicle_class}
+              </p>
+              <p>
+                <strong>Costo en créditos:</strong>{" "}
+                {itemDetails.cost_in_credits}
+              </p>
+              <p>
+                <strong>Velocidad máxima:</strong>{" "}
+                {itemDetails.max_atmosphering_speed}
+              </p>
+              <p>
+                <strong>Longitud:</strong> {itemDetails.length}
+              </p>
+              <p>
+                <strong>Capacidad de carga:</strong>{" "}
+                {itemDetails.cargo_capacity}
+              </p>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
   return (
-    <React.Fragment>
-      <div className="d-flex" style={{width: "100%"}}>
-        <div style={{width: "40%"}}>
-          <img
-            src="https://www.brighterbites.org/wp-content/uploads/2016/04/placeholder-800x600.png"
-            alt="Description"
-            className="img-fluid"
-            width="600"
-            height="400"
-            style={{ marginLeft: "10rem", marginTop: "5rem" }}
-          />
-        </div>
-        <div style={{width: "40%",  marginLeft: "15rem", marginTop: "5rem"}}>
-          <p style={{textAlign: "center", width: "70%"}}>
-
-            
-            
-          </p>
-        </div>
+    <div className="container my-5 d-flex justify-content-center">
+      <div className="card shadow-lg" style={{ width: "40rem" }}>
+        {renderContent()}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
