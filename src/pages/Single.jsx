@@ -6,9 +6,11 @@ import { peopleById, planetsById, vehiclesById } from "../services/fetchApi";
 export const Single = () => {
   const { store, dispatch } = useGlobalReducer();
   const { uid, type } = useParams();
-  
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         let data;
 
@@ -37,8 +39,11 @@ export const Single = () => {
 
       } catch (error) {
         console.error("Error obteniendo detalles:", error);
+      } finally {
+        setLoading(false)
       }
     };
+
 
     fetchData();
   }, [uid, type, dispatch]);
@@ -46,6 +51,17 @@ export const Single = () => {
   const itemDetails = store.SelectById;
 
   const renderContent = () => {
+
+    if (loading) {
+      return (
+        <div className="d-flex justify-content-center my-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      );
+    }
+
     if (!itemDetails) {
       return (
         <div className="alert alert-warning">

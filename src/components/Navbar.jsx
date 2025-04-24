@@ -32,7 +32,7 @@ export const Navbar = () => {
               <li>
                 {store.favorites.length > 0 ? (
                   store.favorites.map((fav, index) => (
-                    <React.Fragment
+                    <div
                       key={index}
                       className="d-flex justify-content-between
                       align-items-center"
@@ -48,7 +48,7 @@ export const Navbar = () => {
                       >
                         <i className="fa-solid fa-trash-can"></i>
                       </button>
-                    </React.Fragment>
+                    </div>
                   ))
                 ) : (
                   <a className="dropdown-item" href="#">

@@ -57,7 +57,7 @@ export default function storeReducer(store, action = {}) {
       }
       return {
         ...store,
-        SelectById: dataById || data,
+        SelectById:{...dataById, ...data},
       };
     }
     
